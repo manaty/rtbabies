@@ -1,8 +1,5 @@
 // Copyright (c) 2014. Manaty SARL.
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are not permitted 
+// Licensed GPL V3
 //
 // 1.0.0.001
 
@@ -201,7 +198,7 @@ window.RTBGame = window.RTBGame || {};
 				objects[objectType].images.push(image);
 				eval("image.onload=function(){RTBGame.incrementImageDownload('"+objectType+"')}");
 				var image2 = d.loadImage(name+'.png');
-				eval("image2.onclick=function(){RTBGame.selectObject('"+objectType+"',"+nameIndex+");}");
+				eval("image2.onclick=function(){RTBGame.toggleObject('"+objectType+"',"+nameIndex+");}");
 				objects[objectType].chooserDiv.appendChild(image2);
 			}
 		}
@@ -250,32 +247,7 @@ window.RTBGame = window.RTBGame || {};
 		d.buildUI();
 	};
 	
-	//------ Game controler
-	d.selectObject=function(objectType,objectIndex){
-		if(objects[objectType].selectedIndex>=0){
-				objects[objectType].div.removeChild(objects[objectType].images[objects[objectType].selectedIndex]);
-		}
-		if(objectIndex!=objects[objectType].selectedIndex || objectType=="dolls"){
-			objects[objectType].div.appendChild(objects[objectType].images[objectIndex]);
-			objects[objectType].selectedIndex=objectIndex;
-		}else {
-			objects[objectType].selectedIndex=-1;
-		}
-	}
-	
-	d.selectObjectType=function(objectType){
-		selectedType=objectType;
-		for(var objectType in objects){
-			if(objectType==selectedType){
-					objects[objectType].chooserDiv.className="RTB_chooser_selected";
-			} else {
-					objects[objectType].chooserDiv.className="RTB_chooser";	
-			}
-		}
-		d.rebuildStyle();
-	}
-	
-	
+	//------ Window controlers
 	d.magnify=function(){
 		fullScreen=!fullScreen;
 		if(fullScreen){
@@ -297,5 +269,45 @@ window.RTBGame = window.RTBGame || {};
 		}
 		d.rebuildStyle();
 	}
+	
+	//------ Game controlers
+	d.toggleObject=function(objectType,objectIndex){
+		var selectedIndex = objects[objectType].selectedIndex;
+		d.unselectObject(objectType);
+		if(objectIndex!=selectedIndex || objectType=="dolls"){
+			if(objectType=="outfits"){
+				d.unselectObject("tops");
+				d.unselectObject("pants");
+			} else if (objectType=="tops"  || objectType=="pants"){
+				d.unselectObject("outfits");
+			}
+			d.selectObject(objectType,objectIndex)
+		} 
+	}
+	
+	d.selectObject=function(objectType,objectIndex){
+		objects[objectType].div.appendChild(objects[objectType].images[objectIndex]);
+		objects[objectType].selectedIndex=objectIndex;
+	}
+	
+	d.unselectObject=function(objectType){
+		if(objects[objectType].selectedIndex>=0){
+			objects[objectType].div.removeChild(objects[objectType].images[objects[objectType].selectedIndex]);
+			objects[objectType].selectedIndex=-1;
+		}
+	}
+	
+	d.selectObjectType=function(objectType){
+		selectedType=objectType;
+		for(var objectType in objects){
+			if(objectType==selectedType){
+					objects[objectType].chooserDiv.className="RTB_chooser_selected";
+			} else {
+					objects[objectType].chooserDiv.className="RTB_chooser";	
+			}
+		}
+		d.rebuildStyle();
+	}
+	
 	
 })(jQuery,RTBGame)
