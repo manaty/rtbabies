@@ -1,7 +1,30 @@
+<?php
+$objectsDirName=array("Dolls"=>"#c38635","Others"=>"#908916","Outfits"=>"#517a2d","Pants"=>"#41a39d","Shoes"=>"#5f337a","Tops"=>"#d0647a");
+
+function getImagesArray($dirName){
+	$result = "["; 
+    $sepFlag=false;
+	$files = scandir("../img/".$dirName);
+    foreach ($files as $key => $value) {
+    	if(substr($value,-4) === ".png"){
+    		if($sepFlag){
+    			$result.=",";
+    		} else {
+    			$sepFlag=true;
+    		}
+			$result.="'".$dirName."/".basename($value,".png")."'";
+    	}
+    }
+	$result.="]";
+	return $result;
+}
+
+header('Content-type: application/javascript');
+?>
 // Copyright (c) 2014. Manaty SARL.
 // Licensed GPL V3
 //
-// 1.0.0.001
+// 1.0.0.002
 
 
 window.RTBGame = window.RTBGame || {};
@@ -20,69 +43,24 @@ window.RTBGame = window.RTBGame || {};
 	
 	var selectedType="dolls";
 	var objects = {}
-	objects.dolls={}
-	objects.dolls.names =  ["Dolls/Doll-Gavin","Dolls/Doll-Geoff","Dolls/Doll-Jack","Dolls/Doll-Lindsay","Dolls/Doll-Michael","Dolls/Doll-Ray","Dolls/Doll-Ryan"];
-	objects.dolls.images = [];
-	objects.dolls.nbLoaded = 0;
-	objects.dolls.selectedIndex = -1;
-	objects.dolls.color = "#505050";
-	objects.dolls.div = document.createElement('div');
-	objects.dolls.div.style.zIndex=10;
-	objects.dolls.chooserDiv = document.createElement('div');
-	
-	objects.shoes={}
-	objects.shoes.names = ["Shoes/Gold-Boots","Shoes/Penguin-Boots"];
-	objects.shoes.images = [];
-	objects.shoes.nbLoaded = 0;
-	objects.shoes.selectedIndex = -1;
-	objects.shoes.color = "#606060";
-	objects.shoes.div = document.createElement('div');
-	objects.shoes.div.style.zIndex=11;
-	objects.shoes.chooserDiv = document.createElement('div');
-	
-	
-	objects.outfits={}
-	objects.outfits.names = ["Outfits/Penguin-Outfit"];
-	objects.outfits.images = [];
-	objects.outfits.nbLoaded = 0;
-	objects.outfits.selectedIndex = -1;
-	objects.outfits.color = "#707070";
-	objects.outfits.div = document.createElement('div');
-	objects.outfits.div.style.zIndex=12;
-	objects.outfits.chooserDiv = document.createElement('div');
-	
-	
-	objects.pants={}
-	objects.pants.names = ["Pants/Creeper-Shorts"];
-	objects.pants.images = [];
-	objects.pants.nbLoaded = 0;
-	objects.pants.selectedIndex = -1;
-	objects.pants.color = "#808080";
-	objects.pants.div = document.createElement('div');
-	objects.pants.div.style.zIndex=13;
-	objects.pants.chooserDiv = document.createElement('div');
-	
-	
-	objects.tops={}
-	objects.tops.names = ["Tops/Creeper-Shirt"];
-	objects.tops.images = [];
-	objects.tops.nbLoaded = 0;
-	objects.tops.selectedIndex = -1;
-	objects.tops.color = "#909090";
-	objects.tops.div = document.createElement('div');
-	objects.tops.div.style.zIndex=14;
-	objects.tops.chooserDiv = document.createElement('div');
-	
-	
-	objects.others={}
-	objects.others.names = ["Others/Creeper-Fingerless-Gloves","Others/Creeper-Scarf","Others/Penguin-Bow","Others/White-Gloves"];
-	objects.others.images = [];
-	objects.others.nbLoaded = 0;
-	objects.others.selectedIndex = -1;
-	objects.others.color = "#A0A0A0";
-	objects.others.div = document.createElement('div');
-	objects.others.div.style.zIndex=15;
-	objects.others.chooserDiv = document.createElement('div');
+<?php
+$zIndex=9;
+foreach ($objectsDirName as $dirName => $color) {
+	$propertyName=strtolower($dirName);
+	$zIndex++;
+?>	
+	objects.<?=$propertyName?>={}
+	objects.<?=$propertyName?>.names =  <?=getImagesArray($dirName);?>;
+	objects.<?=$propertyName?>.images = [];
+	objects.<?=$propertyName?>.nbLoaded = 0;
+	objects.<?=$propertyName?>.selectedIndex = -1;
+	objects.<?=$propertyName?>.color = '<?=$color?>';
+	objects.<?=$propertyName?>.div = document.createElement('div');
+	objects.<?=$propertyName?>.div.style.zIndex=<?=$zIndex?>;
+	objects.<?=$propertyName?>.chooserDiv = document.createElement('div');
+<?php
+}
+?>
 	
 	var elapsedCounter=0;
 	var isGameLoaded=false;
@@ -172,7 +150,7 @@ window.RTBGame = window.RTBGame || {};
 	
 	d.loadImage=function(imageName){
 		var result=new Image();
-		result.src='img/'+imageName;
+		result.src='http://sydk5.com/rtdressup/src/img/'+imageName;
 		return result;
 	}
 	
@@ -226,13 +204,13 @@ window.RTBGame = window.RTBGame || {};
 			container.appendChild(loader);
 			d.setLoaderCss();
 			commandDiv.className="RTB_commands";
-			commandDiv.innerHTML="<span onclick='RTBGame.magnify()' class='RTB_icon' style='background-image:url(img\/Buttons/Button-settings.png);'></span>";
+			commandDiv.innerHTML="<span onclick='RTBGame.magnify()' class='RTB_icon' style='background-image:url(http:\/\/sydk5.com\/rtdressup\/src\/img\/Buttons/Button-settings.png);'></span>";
 			container.appendChild(commandDiv);
 			
 			for(var objectType in objects){
 				objects[objectType].div.className="RTB_image";
 				container.appendChild(objects[objectType].div);
-			    commandDiv.innerHTML+="<span onclick='RTBGame.selectObjectType(\""+objectType+"\")' class='RTB_icon' style='background-image:url(img\/Buttons/Button-"+objectType+".png);'></span>";
+			    commandDiv.innerHTML+="<span onclick='RTBGame.selectObjectType(\""+objectType+"\")' class='RTB_icon' style='background-image:url(http:\/\/sydk5.com\/rtdressup\/src\/img\/Buttons/Button-"+objectType+".png);'></span>";
 				if(objectType==selectedType){
 					objects[objectType].chooserDiv.className="RTB_chooser_selected";
 				} else {

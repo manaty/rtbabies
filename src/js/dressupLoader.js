@@ -38,8 +38,8 @@ if(document.addEventListener ){
     };
 
    aLoader = [
-    { load: "./js/jquery-1.10.2.min.js"},
-    { load: "./js/rtbgame_1.0.js"}];
+    { load: "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"},
+    { load: "//sydk5.com/rtdressup/src/js/rtbgame_1.0.php"}];
 
 loadResources(aLoader, doDelayLoad);
 
