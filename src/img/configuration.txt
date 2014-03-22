@@ -1,0 +1,25 @@
+; Copyright (c) 2014. Manaty SARL.
+; author: smichea
+; Licensed GPL V3
+;
+; 1.0.0.002
+;
+; This is the configuration file of the dressup game
+; Just list in order the name of the directories that will be 
+; displayed in the game, the order is linked to the order of the layers
+; The name must match EXACTLY the name of the directory that contain the images
+; then you follow by ":" and the hexa RGB color that will be used for this layer
+; note that the Settings directory correspond to game commands and should not be removed
+; nor edited : you can replace the png inside with the images you want but do not
+; remove or rename those images (unless you adapt the source code).
+; unless you modify the code you need a Dolls directory that contains the base
+; images of the avatars.
+
+Settings = #c30000
+Dolls = #c38635
+Outfits = #517a2d
+Shoes = #5f337a
+Pants = #41a39d
+Tops = #d0647a
+Gloves = #908916
+Others = #908916
